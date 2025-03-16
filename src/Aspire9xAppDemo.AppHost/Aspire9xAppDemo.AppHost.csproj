@@ -15,4 +15,8 @@
 		<PackageReference Include="Aspire.Hosting.AppHost" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Aspire9xAppDemo.WeatherApi\Aspire9xAppDemo.WeatherApi.csproj" />
+	</ItemGroup>
+
 </Project>
