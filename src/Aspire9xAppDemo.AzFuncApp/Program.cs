@@ -1,3 +1,4 @@
+using Aspire9xAppDemo.ServiceDefaults;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Hosting;
 
@@ -12,4 +13,4 @@ builder.ConfigureFunctionsWebApplication();
 //     .AddApplicationInsightsTelemetryWorkerService()
 //     .ConfigureFunctionsApplicationInsights();
 
-builder.Build().Run();
+await builder.Build().RunAsync().ConfigureAwait(false);

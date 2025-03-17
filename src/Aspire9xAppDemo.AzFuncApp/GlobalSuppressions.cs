@@ -7,3 +7,4 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Aspire9xAppDemo.AzFuncApp.HelloWorld")]
 [assembly: SuppressMessage("Performance", "CA1848:Use the LoggerMessage delegates", Justification = "<Pending>", Scope = "member", Target = "~M:Aspire9xAppDemo.AzFuncApp.HelloWorld.Run(Microsoft.AspNetCore.Http.HttpRequest)~Microsoft.AspNetCore.Mvc.IActionResult")]
+[assembly: SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "<Pending>")]
