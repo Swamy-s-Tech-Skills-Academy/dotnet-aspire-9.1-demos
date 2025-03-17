@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aspire9xAppDemo.WeatherApi.Models;
 
-public sealed class WeatherForecast
+internal sealed class WeatherForecast
 {
     [Key]
     public int Id { get; set; } = 0;
