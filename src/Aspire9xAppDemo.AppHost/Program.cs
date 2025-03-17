@@ -22,4 +22,6 @@ builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
         .WithReference(weatherApi)
         .WaitFor(weatherApi);
 
+builder.AddAzureFunctionsProject<Projects.Aspire9xAppDemo_AzFuncApp>("aspire9xappdemo-azfuncapp");
+
 await builder.Build().RunAsync().ConfigureAwait(false);

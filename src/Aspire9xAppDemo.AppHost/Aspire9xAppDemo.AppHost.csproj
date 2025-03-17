@@ -10,11 +10,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Aspire.Hosting.AppHost" />
+		<PackageReference Include="Aspire.Hosting.Azure.Functions" />
 		<PackageReference Include="Aspire.Hosting.Redis" />
 		<PackageReference Include="Aspire.Hosting.SqlServer" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Aspire9xAppDemo.AzFuncApp\Aspire9xAppDemo.AzFuncApp.csproj" />
 		<ProjectReference Include="..\Aspire9xAppDemo.WeatherApi\Aspire9xAppDemo.WeatherApi.csproj" />
 		<ProjectReference Include="..\Aspire9xAppDemo.Web\Aspire9xAppDemo.Web.csproj" />
 	</ItemGroup>
