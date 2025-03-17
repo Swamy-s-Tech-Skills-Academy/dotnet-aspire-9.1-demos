@@ -43,4 +43,4 @@ app.MapRazorComponents<App>()
 
 app.MapDefaultEndpoints();
 
-await app.RunAsync();
+await app.RunAsync().ConfigureAwait(false);

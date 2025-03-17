@@ -59,7 +59,7 @@ app.MapGet("/weatherforecast", () =>
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<WeatherDbContext>();
-    await context.Database.EnsureCreatedAsync();
+    await context.Database.EnsureCreatedAsync().ConfigureAwait(false);
 
     if (!context.WeatherForecasts.Any())
     {
@@ -72,7 +72,7 @@ using (var scope = app.Services.CreateScope())
                 Summary = Summaries[RandomNumberGenerator.GetInt32(Summaries.Length)]
             });
 
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }
@@ -85,4 +85,4 @@ app.MapGet("/weatherforecastefsql", ([FromServices] WeatherDbContext context) =>
 
 app.MapDefaultEndpoints();
 
-await app.RunAsync().ConfigureAwait(true);
+await app.RunAsync().ConfigureAwait(false);
