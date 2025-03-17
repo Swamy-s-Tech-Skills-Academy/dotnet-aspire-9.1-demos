@@ -1,6 +1,9 @@
 using Aspire9xAppDemo.ServiceDefaults;
 using AspireApp.ApiService.Models;
+using AspireApp.ApiService.Persistence;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,8 @@ builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 builder.Services.AddCors();
+
+builder.AddSqlServerDbContext<WeatherDbContext>("sqldb");
 
 var app = builder.Build();
 
@@ -40,6 +45,7 @@ app.MapGet("/weatherforecast", () =>
 {
     return Enumerable.Range(1, 5).Select(index => new WeatherForecast
     {
+        Id = index,
         Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
         TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
         Summary = Summaries[RandomNumberGenerator.GetInt32(Summaries.Length)]
@@ -48,6 +54,34 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+#endregion
+
+#region EF Core SQL Connection
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WeatherDbContext>();
+    await context.Database.EnsureCreatedAsync();
+
+    if (!context.WeatherForecasts.Any())
+    {
+        foreach (var index in Enumerable.Range(1, 5))
+        {
+            context.WeatherForecasts.Add(new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
+                Summary = Summaries[RandomNumberGenerator.GetInt32(Summaries.Length)]
+            });
+
+            await context.SaveChangesAsync();
+        }
+    }
+}
+
+app.MapGet("/weatherforecastefsql", ([FromServices] WeatherDbContext context) =>
+{
+    return context.WeatherForecasts.ToArray();
+});
 #endregion
 
 app.MapDefaultEndpoints();
