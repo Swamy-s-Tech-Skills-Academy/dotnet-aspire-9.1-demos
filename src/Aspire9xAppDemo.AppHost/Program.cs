@@ -12,7 +12,8 @@ var sqldb = sql.AddDatabase("sqldb", "master");
 
 var weatherApi = builder.AddProject<Projects.Aspire9xAppDemo_WeatherApi>("weatherapi")
         .WithReference(sqldb)
-        .WaitFor(sqldb);
+        .WaitFor(sqldb)
+        .WithHttpHealthCheck("/health");
 
 builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
         .WithExternalHttpEndpoints()
