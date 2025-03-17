@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspireApp.ApiService.Models;
 
-public class WeatherForecast
+public sealed class WeatherForecast
 {
     [Key]
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
 
     public DateOnly Date { get; set; }
 
