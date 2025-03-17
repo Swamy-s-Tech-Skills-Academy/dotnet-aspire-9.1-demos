@@ -24,4 +24,26 @@ builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
 
 builder.AddAzureFunctionsProject<Projects.Aspire9xAppDemo_AzFuncApp>("aspire9xappdemo-azfuncapp");
 
+builder.AddNpmApp("angular", "../AspireJavaScript.Angular")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+builder.AddNpmApp("react", "../AspireJavaScript.React")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+builder.AddNpmApp("vue", "../AspireJavaScript.Vue")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
 await builder.Build().RunAsync().ConfigureAwait(false);

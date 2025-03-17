@@ -7,6 +7,7 @@
 		<PackageVersion Include="Aspire.Hosting.Azure.Functions" Version="9.1.0-preview.1.25121.10" />
 		<PackageVersion Include="Aspire.Hosting.Redis" Version="9.1.0" />
 		<PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.1.0" />
+		<PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.1.0" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.7.0.110445" />
 		<!-- OpenTelemetry -->
 		<PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.3.0" />
