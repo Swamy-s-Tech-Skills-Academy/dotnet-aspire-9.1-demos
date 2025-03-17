@@ -1,4 +1,4 @@
-namespace AspireWithJavaScript.Web;
+namespace Aspire9xAppDemo.Web;
 
 public class WeatherApiClient(HttpClient httpClient)
 {

@@ -1,11 +1,12 @@
-using AspireWithJavaScript.ServiceDefaults;
-using AspireWithJavaScript.Web;
-using AspireWithJavaScript.Web.Components;
+using Aspire9xAppDemo.ServiceDefaults;
+using Aspire9xAppDemo.Web;
+using Aspire9xAppDemo.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
+
 builder.AddRedisOutputCache("cache");
 
 // Add services to the container.

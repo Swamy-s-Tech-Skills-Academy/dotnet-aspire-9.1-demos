@@ -1,7 +1,7 @@
-﻿using AspireApp.ApiService.Models;
+﻿using Aspire9xAppDemo.WeatherApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspireApp.ApiService.Persistence;
+namespace Aspire9xAppDemo.WeatherApi.Persistence;
 
 public class WeatherDbContext(DbContextOptions<WeatherDbContext> options) : DbContext(options)
 {

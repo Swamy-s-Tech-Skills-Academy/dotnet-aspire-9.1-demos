@@ -1,9 +1,8 @@
 using Aspire9xAppDemo.ServiceDefaults;
-using AspireApp.ApiService.Models;
-using AspireApp.ApiService.Persistence;
+using Aspire9xAppDemo.WeatherApi.Models;
+using Aspire9xAppDemo.WeatherApi.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
-using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 

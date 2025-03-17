@@ -1,5 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+var cache = builder.AddRedis("cache");
+
 var password = builder.AddParameter("password", secret: true);
 
 var sql = builder.AddSqlServer(name: "sql", password, 1443)
@@ -8,8 +10,16 @@ var sql = builder.AddSqlServer(name: "sql", password, 1443)
 
 var sqldb = sql.AddDatabase("sqldb", "master");
 
-builder.AddProject<Projects.Aspire9xAppDemo_WeatherApi>("weatherapi")
+var weatherApi = builder.AddProject<Projects.Aspire9xAppDemo_WeatherApi>("weatherapi")
         .WithReference(sqldb)
         .WaitFor(sqldb);
+
+builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
+        .WithExternalHttpEndpoints()
+        .WithReference(cache)
+        .WaitFor(cache)
+        .WithReference(weatherApi)
+        .WaitFor(weatherApi);
+
 
 await builder.Build().RunAsync();

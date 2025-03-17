@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AspireApp.ApiService.Models;
+namespace Aspire9xAppDemo.WeatherApi.Models;
 
 public sealed class WeatherForecast
 {
