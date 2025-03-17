@@ -14,12 +14,11 @@ var weatherApi = builder.AddProject<Projects.Aspire9xAppDemo_WeatherApi>("weathe
         .WithReference(sqldb)
         .WaitFor(sqldb);
 
-//builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
-//        .WithExternalHttpEndpoints()
-//        .WithReference(cache)
-//        .WaitFor(cache)
-//        .WithReference(weatherApi)
-//        .WaitFor(weatherApi);
-
+builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
+        .WithExternalHttpEndpoints()
+        .WithReference(cache)
+        .WaitFor(cache)
+        .WithReference(weatherApi)
+        .WaitFor(weatherApi);
 
 await builder.Build().RunAsync();
