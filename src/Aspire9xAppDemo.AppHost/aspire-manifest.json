@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json.schemastore.org/aspire-8.0.json",
+  "resources": {
+    "cache": {
+      "type": "container.v0",
+      "connectionString": "{cache.bindings.tcp.host}:{cache.bindings.tcp.port}",
+      "image": "docker.io/library/redis:7.4",
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 6379
+        }
+      }
+    },
+    "password": {
+      "type": "parameter.v0",
+      "value": "{password.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "sql": {
+      "type": "container.v0",
+      "connectionString": "Server={sql.bindings.tcp.host},{sql.bindings.tcp.port};User ID=sa;Password={password.value};TrustServerCertificate=true",
+      "image": "mcr.microsoft.com/mssql/server:2022-latest",
+      "bindMounts": [
+        {
+          "source": "../../../../DataStores/DataVolume/data",
+          "target": "/var/opt/mssql/data",
+          "readOnly": false
+        },
+        {
+          "source": "../../../../DataStores/DataVolume/log",
+          "target": "/var/opt/mssql/log",
+          "readOnly": false
+        },
+        {
+          "source": "../../../../DataStores/DataVolume/secrets",
+          "target": "/var/opt/mssql/secrets",
+          "readOnly": false
+        }
+      ],
+      "env": {
+        "ACCEPT_EULA": "Y",
+        "MSSQL_SA_PASSWORD": "{password.value}"
+      },
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "port": 1443,
+          "targetPort": 1433
+        }
+      }
+    },
+    "sqldb": {
+      "type": "value.v0",
+      "connectionString": "{sql.connectionString};Database=master"
+    },
+    "weatherapi": {
+      "type": "project.v0",
+      "path": "../Aspire9xAppDemo.WeatherApi/Aspire9xAppDemo.WeatherApi.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "HTTP_PORTS": "{weatherapi.bindings.http.targetPort}",
+        "ConnectionStrings__sqldb": "{sqldb.connectionString}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "aspire9xappdemo-web": {
+      "type": "project.v0",
+      "path": "../Aspire9xAppDemo.Web/Aspire9xAppDemo.Web.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "HTTP_PORTS": "{aspire9xappdemo-web.bindings.http.targetPort}",
+        "ConnectionStrings__cache": "{cache.connectionString}",
+        "services__weatherapi__http__0": "{weatherapi.bindings.http.url}",
+        "services__weatherapi__https__0": "{weatherapi.bindings.https.url}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "external": true
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http",
+          "external": true
+        }
+      }
+    },
+    "funcstorage7f422": {
+      "type": "azure.bicep.v0",
+      "path": "funcstorage7f422.module.bicep",
+      "params": {
+        "principalType": "",
+        "principalId": ""
+      }
+    },
+    "aspire9xappdemo-azfuncapp": {
+      "type": "project.v0",
+      "path": "../Aspire9xAppDemo.AzFuncApp/Aspire9xAppDemo.AzFuncApp.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+        "AzureFunctionsJobHost__telemetryMode": "OpenTelemetry",
+        "ASPNETCORE_URLS": "http://\u002B:{aspire9xappdemo-azfuncapp.bindings.http.targetPort}",
+        "AzureWebJobsStorage__blobServiceUri": "{funcstorage7f422.outputs.blobEndpoint}",
+        "AzureWebJobsStorage__queueServiceUri": "{funcstorage7f422.outputs.queueEndpoint}",
+        "Aspire__Azure__Storage__Blobs__AzureWebJobsStorage__ServiceUri": "{funcstorage7f422.outputs.blobEndpoint}",
+        "Aspire__Azure__Storage__Queues__AzureWebJobsStorage__ServiceUri": "{funcstorage7f422.outputs.queueEndpoint}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8080
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8080
+        }
+      }
+    },
+    "angular": {
+      "type": "container.v1",
+      "build": {
+        "context": "../AspireJavaScript.Angular",
+        "dockerfile": "../AspireJavaScript.Angular/Dockerfile"
+      },
+      "env": {
+        "NODE_ENV": "production",
+        "services__weatherapi__http__0": "{weatherapi.bindings.http.url}",
+        "services__weatherapi__https__0": "{weatherapi.bindings.https.url}",
+        "PORT": "{angular.bindings.http.targetPort}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8000,
+          "external": true
+        }
+      }
+    },
+    "react": {
+      "type": "container.v1",
+      "build": {
+        "context": "../AspireJavaScript.React",
+        "dockerfile": "../AspireJavaScript.React/Dockerfile"
+      },
+      "env": {
+        "NODE_ENV": "production",
+        "services__weatherapi__http__0": "{weatherapi.bindings.http.url}",
+        "services__weatherapi__https__0": "{weatherapi.bindings.https.url}",
+        "BROWSER": "none",
+        "PORT": "{react.bindings.http.targetPort}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8001,
+          "external": true
+        }
+      }
+    },
+    "vue": {
+      "type": "container.v1",
+      "build": {
+        "context": "../AspireJavaScript.Vue",
+        "dockerfile": "../AspireJavaScript.Vue/Dockerfile"
+      },
+      "env": {
+        "NODE_ENV": "production",
+        "services__weatherapi__http__0": "{weatherapi.bindings.http.url}",
+        "services__weatherapi__https__0": "{weatherapi.bindings.https.url}",
+        "PORT": "{vue.bindings.http.targetPort}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8002,
+          "external": true
+        }
+      }
+    }
+  }
+}
