@@ -399,3 +399,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 src/Aspire9xAppDemo.AppHost/funcstorage7f422.module.bicep
+src/Aspire9xAppDemo.Vue/vite.config.ts.timestamp-1742225120137-c82e7039ed96f.mjs
