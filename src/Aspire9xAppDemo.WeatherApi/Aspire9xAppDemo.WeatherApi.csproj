@@ -9,7 +9,6 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" />
 		<PackageReference Include="Swashbuckle.AspNetCore" />
-		<PackageVersion Include="Aspire.Microsoft.Data.SqlClient" />
 		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
 	</ItemGroup>
 
