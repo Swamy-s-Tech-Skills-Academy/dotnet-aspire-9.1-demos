@@ -78,12 +78,14 @@
         "http": {
           "scheme": "http",
           "protocol": "tcp",
-          "transport": "http"
+          "transport": "http",
+          "external": true
         },
         "https": {
           "scheme": "https",
           "protocol": "tcp",
-          "transport": "http"
+          "transport": "http",
+          "external": true
         }
       }
     },
@@ -157,8 +159,8 @@
     "angular": {
       "type": "container.v1",
       "build": {
-        "context": "../AspireJavaScript.Angular",
-        "dockerfile": "../AspireJavaScript.Angular/Dockerfile"
+        "context": "../Aspire9xAppDemo.Angular",
+        "dockerfile": "../Aspire9xAppDemo.Angular/Dockerfile"
       },
       "env": {
         "NODE_ENV": "production",
@@ -179,8 +181,8 @@
     "react": {
       "type": "container.v1",
       "build": {
-        "context": "../AspireJavaScript.React",
-        "dockerfile": "../AspireJavaScript.React/Dockerfile"
+        "context": "../Aspire9xAppDemo.React",
+        "dockerfile": "../Aspire9xAppDemo.React/Dockerfile"
       },
       "env": {
         "NODE_ENV": "production",
@@ -202,8 +204,8 @@
     "vue": {
       "type": "container.v1",
       "build": {
-        "context": "../AspireJavaScript.Vue",
-        "dockerfile": "../AspireJavaScript.Vue/Dockerfile"
+        "context": "../Aspire9xAppDemo.Vue",
+        "dockerfile": "../Aspire9xAppDemo.Vue/Dockerfile"
       },
       "env": {
         "NODE_ENV": "production",
