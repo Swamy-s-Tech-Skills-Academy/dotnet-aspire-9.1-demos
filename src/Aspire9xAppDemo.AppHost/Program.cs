@@ -12,7 +12,8 @@ var sqldb = sql.AddDatabase("sqldb", "master");
 
 var weatherApi = builder.AddProject<Projects.Aspire9xAppDemo_WeatherApi>("weatherapi")
         .WithReference(sqldb)
-        .WaitFor(sqldb);
+        .WaitFor(sqldb)
+        .WithHttpHealthCheck("/health");
 
 builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
         .WithExternalHttpEndpoints()
@@ -21,4 +22,28 @@ builder.AddProject<Projects.Aspire9xAppDemo_Web>("aspire9xappdemo-web")
         .WithReference(weatherApi)
         .WaitFor(weatherApi);
 
-await builder.Build().RunAsync();
+builder.AddAzureFunctionsProject<Projects.Aspire9xAppDemo_AzFuncApp>("aspire9xappdemo-azfuncapp");
+
+builder.AddNpmApp("angular", "../Aspire9xAppDemo.Angular")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+builder.AddNpmApp("react", "../Aspire9xAppDemo.React")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+builder.AddNpmApp("vue", "../Aspire9xAppDemo.Vue")
+    .WithReference(weatherApi)
+    .WaitFor(weatherApi)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+await builder.Build().RunAsync().ConfigureAwait(false);

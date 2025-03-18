@@ -24,6 +24,15 @@
         "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20146"
       },
       "launchBrowser": true
+    },
+    "Aspire Manifest": {
+      "commandName": "Project",
+      "commandLineArgs": "--publisher manifest --output-path aspire-manifest.json",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "DOTNET_ENVIRONMENT": "Production"
+      }
     }
   }
 }
